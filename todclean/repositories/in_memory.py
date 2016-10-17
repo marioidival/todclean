@@ -9,6 +9,12 @@ class InMemory:
         self._data = {}
         self.next_id = 1
 
+    def _do_change(self, task_id, bool_value):
+        task = self._data[task_id]
+        task.done = bool_value
+        self._data[task_id] = task
+        return task
+
     def save(self, task):
         self._data[self.next_id] = task
         task.task_id = self.next_id
@@ -19,16 +25,10 @@ class InMemory:
         return self._data.values()
 
     def check(self, task_id):
-        task = self._data[task_id]
-        task.done = True
-        self._data[task_id] = task
-        return task
+        return self._do_change(task_id, True)
 
     def uncheck(self, task_id):
-        task = self._data[task_id]
-        task.done = False
-        self._data[task_id] = task
-        return task
+        return self._do_change(task_id, False)
 
     def delete(self, task_id):
         del self._data[task_id]
